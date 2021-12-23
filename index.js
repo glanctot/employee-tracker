@@ -1,3 +1,4 @@
+const mysql = require('mysql');
 const inquirer = require('inquirer');
 
 const startingQuestions = () => {
@@ -9,5 +10,9 @@ const startingQuestions = () => {
             choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
         }
     ])
-    .then()
+    .then(answer => {
+        switch (answer.choice) {
+            
+        }
+    })
 }
