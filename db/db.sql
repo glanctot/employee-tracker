@@ -1,0 +1,9 @@
+DROP DATABASE IF EXISTS company;
+
+CREATE DATABASE company;
+USE company;
+
+CREATE TABLE departments (
+    id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    dept_name VARCHAR(30)
+);
