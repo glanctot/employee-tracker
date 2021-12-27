@@ -1,6 +1,17 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+
+// connect to database
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'Jameson20!',
+        database: 'company'
+    },
+    console.log('connected to the database')
+);
 
 const startingQuestion = () => {
     return inquirer.prompt ([
@@ -35,11 +46,16 @@ const startingQuestion = () => {
                 updateEmployeeRole();
                 break;
             case "Exit":
+                break;
         }
     })
 }
 
 function viewAllDepartments() {
-    
+    // const action = "SELECT * FROM departments"
+    db.query(`SELECT * FROM departments`, (err, rows) => {
+        console.table(rows)
+    })
 }
+
 startingQuestion();
