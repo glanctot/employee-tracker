@@ -46,16 +46,29 @@ const startingQuestion = () => {
                 updateEmployeeRole();
                 break;
             case "Exit":
+                exit();
                 break;
         }
     })
 }
 
 function viewAllDepartments() {
-    // const action = "SELECT * FROM departments"
     db.query(`SELECT * FROM departments`, (err, rows) => {
         console.table(rows)
+        startingQuestion();
     })
 }
+
+function viewAllRoles() {
+    db.query(`SELECT * FROM roles`, (err, rows) => {
+        console.table(rows)
+        startingQuestion();
+    })
+}
+
+function exit() {
+    db.end();
+}
+
 
 startingQuestion();
