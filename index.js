@@ -60,7 +60,7 @@ function viewAllDepartments() {
 }
 
 function viewAllRoles() {
-    db.query(`SELECT * FROM roles`, (err, rows) => {
+    db.query(`SELECT roles.*, departments.dept_name AS department FROM roles LEFT JOIN departments ON roles.dept_id = departments.id`, (err, rows) => {
         console.table(rows)
         startingQuestion();
     })
@@ -69,6 +69,5 @@ function viewAllRoles() {
 function exit() {
     db.end();
 }
-
 
 startingQuestion();
