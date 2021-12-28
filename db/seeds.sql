@@ -1,3 +1,15 @@
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
+VALUES
+    ('Mark', 'Keller', 1, 1),
+    ('Kaitlin', 'Mack', 2, 1),
+    ('Gary', 'Johnson', 3, NULL),
+    ('Greg', 'Lanctot', 4, 2),
+    ('Lexi', 'Ginters', 5, 2),
+    ('Paul', 'Anderson', 6, NULL),
+    ('Barb', 'Johnson', 7, 3),
+    ('Owen', 'Johnson', 8, 3),
+    ('Zoey', 'Johnson', 9, NULL);
+
 INSERT INTO roles (job_title, salary, dept_id)
 VALUES
     ('Customer Service Representative', 40000, 1),
