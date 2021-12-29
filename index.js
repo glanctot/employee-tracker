@@ -145,10 +145,12 @@ function addRole() {
         }
     ])
     .then(answer => {
+        const params = [answer.newRole, answer.salary, answer.deptId];
+
         const sql = `INSERT INTO roles (job_title, salary, dept_id)
             VALUES (?, ?, ?)`;
 
-        db.query(sql, answer.newRole, (err, res) => {
+        db.query(sql, params, (err, res) => {
             if (err) throw (err);
             console.log('Added ' + answer.newRole + ' to roles');
             startingQuestion();
