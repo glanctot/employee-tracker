@@ -158,6 +158,76 @@ function addRole() {
     })
 }
 
+function addEmployee () {
+    return inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: "What is the employee's first name?",
+            validate: fName => {
+                if (fName) {
+                    return true;
+                } else {
+                    console.log('Please enter the first name of the employee')
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: "What is the employee's last name?",
+            validate: lName => {
+                if (lName) {
+                    return true;
+                } else {
+                    console.log('Please enter the last name of the employee');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'role',
+            message: "What is the employee's role?",
+            validate: role => {
+                if (role) {
+                    return true;
+                } else {
+                    console.log('Please enter the employee role');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'manager',
+            message: "Who is the employee's manager?",
+            validate: manager => {
+                if (manager) {
+                    return true;
+                } else {
+                    console.log("Please enter the employee's manager");
+                    return false;
+                }
+            }
+        }
+
+    ])
+    .then(answer => {
+        const params = [answer.firstName, answer.lastName, answer.role, answer.manager];
+
+        const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+            VALUES (?, ?, ?, ?)`;
+
+        db.query(sql, params, (err, res) => {
+            if (err) throw (err);
+            console.log('Added ' + answer.firstName + answer.lastName + ' to employees');
+            startingQuestion();
+        })
+    })
+}
+
 function exit() {
     db.end();
 }
