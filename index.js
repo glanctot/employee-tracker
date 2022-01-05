@@ -228,6 +228,47 @@ function addEmployee () {
     })
 }
 
+function updateEmployeeRole() {
+    const sql = `SELECT * FROM employees`;
+
+    db.query(sql, (err, res) => {
+        const employeeList = res.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'name',
+                message: 'Which employee would you like to update?',
+                choices: employeeList
+            }
+        ])
+        .then(answer => {
+            const employee = answer.name;
+            const params = [];
+            params.push(employee);
+
+            const sql = `SELECT * FROM role`;
+
+            db.query(sql, (err, res) => {
+                const roleList = res.map(({ id, job_title }) => ({ name: job_title, value: id }));
+
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'role',
+                        message: "What is the new role of the employee?",
+                        choices: roleList
+                    }
+                ])
+                .then(answer => {
+                    const roleChoice = answer.role;
+                    params.push(roleChoice);
+                })
+            })
+        })
+    })
+}
+
 function exit() {
     db.end();
 }
