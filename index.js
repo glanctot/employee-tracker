@@ -67,7 +67,7 @@ function viewAllRoles() {
 }
 
 function viewAllEmployees() {
-    db.query(`SELECT employees.*, roles.job_title, roles.salary, departments.dept_name FROM employees LEFT JOIN roles ON employees.role_id = roles.id
+    db.query(`SELECT employees.*, roles.job_title AS role, roles.salary, departments.dept_name AS departments FROM employees LEFT JOIN roles ON employees.role_id = roles.id
     LEFT JOIN departments ON roles.dept_id = departments.id`, (err, rows) => {
         console.table(rows)
         startingQuestion();
@@ -129,31 +129,38 @@ function addRole() {
                     return false;
                 }
             }
-        },
-        {
-            type: 'input',
-            name: 'deptId',
-            message: 'Please enter what department the role is under',
-            validate: deptId => {
-                if (deptId) {
-                    return true;
-                } else {
-                    console.log('Please enter what department the role is under');
-                    return false;
-                }
-            }
         }
     ])
     .then(answer => {
-        const params = [answer.newRole, answer.salary, answer.deptId];
+        const params = [answer.newRole, answer.salary];
 
-        const sql = `INSERT INTO roles (job_title, salary, dept_id)
-            VALUES (?, ?, ?)`;
+        const sql = `SELECT dept_name, id FROM departments`;
 
-        db.query(sql, params, (err, res) => {
+        db.query(sql, (err, res) => {
             if (err) throw (err);
-            console.log('Added ' + answer.newRole + ' to roles');
-            startingQuestion();
+
+            const dept = res.map(({ dept_name, id }) => ({ name: dept_name, value: id }))
+
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'dept',
+                    message: 'What department is this role in?',
+                    choices: dept
+                }
+            ])
+            .then(answer => {
+                const dept = answer.dept;
+                params.push(dept);
+
+                const sql = `INSERT INTO roles (job_title, salary, dept_id) VALUES (?, ?, ?)`;
+
+                db.query(sql, params, (err, res) => {
+                    console.log('Added ' + answer.newRole + " to roles.")
+                    startingQuestion();
+                })
+            })
+            
         })
     })
 }
@@ -263,6 +270,10 @@ function updateEmployeeRole() {
                 .then(answer => {
                     const roleChoice = answer.role;
                     params.push(roleChoice);
+
+                    const swap = params[0];
+                    params[0] = params[1];
+                    params[1] = swap;
 
                     console.log(params);
                     const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
