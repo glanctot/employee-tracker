@@ -247,7 +247,7 @@ function updateEmployeeRole() {
             const params = [];
             params.push(employee);
 
-            const sql = `SELECT * FROM role`;
+            const sql = `SELECT * FROM roles`;
 
             db.query(sql, (err, res) => {
                 const roleList = res.map(({ id, job_title }) => ({ name: job_title, value: id }));
@@ -263,6 +263,15 @@ function updateEmployeeRole() {
                 .then(answer => {
                     const roleChoice = answer.role;
                     params.push(roleChoice);
+
+                    console.log(params);
+                    const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
+
+                    db.query(sql, params, (err, res) => {
+                        console.log("Employee has been updated.");
+
+                        startingQuestion();
+                    })
                 })
             })
         })
